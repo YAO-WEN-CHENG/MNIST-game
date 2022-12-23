@@ -1,0 +1,20 @@
+html,
+body {
+    height: 100%;
+}
+
+body {
+    position: relative;
+    background: #EEEEEE;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+/* 使用井字號來選取特定id的html物件 */
+#canvas {
+    width: 280px;
+    height: 280px;
+    background-color: white;
+}
