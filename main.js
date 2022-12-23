@@ -14,7 +14,6 @@ const hiddenCanvasCtx = hiddenCanvas.getContext("2d");
 hiddenCanvasCtx.scale(CANVAS_SCALE, CANVAS_SCALE);
 
 
-
 loadingModelPromise.then(() => {
     canvas.addEventListener("mousedown", touchStart);
     canvas.addEventListener("mousemove", touchMove);
@@ -73,54 +72,7 @@ $(document).ready(function () {
     canvas.addEventListener("mouseup", touchEnd);
 });
 
-async function updatePredictions() {
-    hiddenCanvasCtx.drawImage(canvas, 0, 0);
-    const hiddenImgData = hiddenCanvasCtx.getImageData(0, 0, INFERENCE_SIZE, INFERENCE_SIZE);
-    var data = hiddenImgData.data;
 
-    var gray_data = [];
-    for (var i = 3; i < data.length; i += 4) {
-        pix = data[i] / 255;
-        pix = (pix - 0.1307) / 0.3081
-        gray_data.push(pix);
-    }
-    const input = new onnx.Tensor(new Float32Array(gray_data), "float32", [1, 1, INFERENCE_SIZE, INFERENCE_SIZE]);
-		
-		//Here
-    const outputMap = await sess.run([input]);
-    const outputTensor = outputMap.values().next().value;
-		//
-}
-
-function touchMove(e) {
-
-if (!isMouseActive) {
-    return
-}
-var pos = getPos(e.clientX, e.clientY);
-x2 = pos.x;
-y2 = pos.y;
-
-ctx.beginPath();
-ctx.moveTo(x1, y1);
-ctx.lineTo(x2, y2);
-ctx.stroke();
-
-x1 = x2;
-y1 = y2;
-
-    updatePredictions();         // update here
-
-}
-
-
-// Here
-function softmax(arr) {
-    return arr.map(function (value, index) {
-        return Math.exp(value) / arr.map(function (y /*value*/) { return Math.exp(y) }).reduce(function (a, b) { return a + b })
-    })
-}
-//
 
 async function updatePredictions() {
     hiddenCanvasCtx.drawImage(canvas, 0, 0);
@@ -145,3 +97,35 @@ async function updatePredictions() {
     console.log(predictLabel);
     //
 }
+
+
+
+function touchMove(e) {
+    if (!isMouseActive) {
+     return
+}
+
+var pos = getPos(e.clientX, e.clientY);
+x2 = pos.x;
+y2 = pos.y;
+
+ctx.beginPath();
+ctx.moveTo(x1, y1);
+ctx.lineTo(x2, y2);
+ctx.stroke();
+
+x1 = x2;
+y1 = y2;
+
+    updatePredictions();         // update here
+}
+
+
+// Here
+function softmax(arr) {
+    return arr.map(function (value, index) {
+        return Math.exp(value) / arr.map(function (y /*value*/) { return Math.exp(y) }).reduce(function (a, b) { return a + b })
+    })
+}
+//
+
