@@ -4,11 +4,38 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>MNIST</title>
+    <link rel="stylesheet" href="style.css">
+    <script defer src="main.js"></script>
 </head>
 <body>
-    <canvas id="canvas" width="280" height="280"></canvas>
+    <div id = "Title">MNIST number guess</div>
+      <div class="container">
+        <div class = "side_area" id="left-half">
+          <div class = "answer" id="a1"> answer 1 </div>
+          <div class = "answer" id="a2"> answer 2 </div>
+          <div class = "answer" id="a3"> answer 3 </div>
+          <div class = "answer" id="a4"> answer 4 </div>
+          <div class = "answer" id="a5"> answer 5 </div>
+          <div class = "answer" id="a6"> answer 6 </div>
+          <div class = "answer" id="a7"> answer 7 </div>
+          <div class = "answer" id="a8"> answer 8 </div>
+          <div class = "answer" id="a9"> answer 9 </div>
+          <div class = "answer" id="a10"> answer 10 </div>
+        </div>
+        <div class = "side_area" id="center">
+          <h4 class = "Rule" id = "chance">You have 10 chance to guess the number</h4>
+          <canvas id="canvas"></canvas>
     <canvas style="width: 28px; height: 28px; background-color: white; display: none;" id="hiddenCanvas" width="28" height="28"></canvas>
+          <h4 class = "input" id = "input">Write down the number you guess</h4>
+        </div>
+        <div class="right-half">
+          <div class = "Button" id="start"> Start </div>
+          <div class = "Button" id="check"> Check </div>
+          <div class = "Button" id="clean"> Clean </div>
+        </div>
+      </div>
+
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/onnxjs/dist/onnx.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
