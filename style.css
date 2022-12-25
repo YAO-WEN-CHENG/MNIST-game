@@ -1,20 +1,114 @@
 html,
 body {
+    display: block;
+    margin: 0px;
     height: 100%;
 }
 
-body {
-    position: relative;
-    background: #EEEEEE;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto;
+#Title{
+    font-weight:bold;
+    font-size: 40px;
+    font-family: 'Papyrus';
+    text-align: center;
+    color: white;
+    padding: 10px;
+    background-color: #013D60;
 }
 
-/* 使用井字號來選取特定id的html物件 */
-#canvas {
-    width: 280px;
-    height: 280px;
-    background-color: white;
+.container{
+    display: flex;
+    flex-wrap: wrap;
+    margin: auto;
+    margin-right: 10%;
+    justify-content: space-between;
+    align-items: center;
 }
+
+#left-half{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 20%;
+}
+
+#center{
+    display: flex;
+    flex-direction: column;
+    justify-content:center;
+    align-items: center;
+    text-align: center;
+    width: 40%;
+}
+
+#right-half{
+    display: flex;
+    flex-direction: column;
+    justify-content:center;
+    align-items: left;
+    text-align: left;
+    width: 40%;
+}
+
+#canvas{
+    width:280px;
+    height:280px;
+    background-color:#D9D9D9;
+}
+
+.Rule{
+    font-family: 'Papyrus';
+}
+
+.Button{
+    font-weight:bold;
+    color: white;
+    font-size: 30px;
+    font-family: 'Papyrus';
+    text-align: center;
+    padding: 10px;
+    padding-left: 60px;
+    padding-right: 60px;
+    margin-bottom: 30px;
+    background-color: #013D60;
+}
+
+.answer{
+    font-weight:bold;
+    font-size: 20px;
+    font-family: 'Papyrus';
+    text-align: center;
+    padding: 10px;
+    /* margin-bottom: 0px; */
+}
+
+#a1{
+    background: #0E5E8B;
+}
+#a2{
+    background: #1874A8;
+}
+#a3{
+    background: #31A2E2;
+}
+#a4{
+    background: #62B5E4;
+}
+#a5{
+    background: #70C0ED;
+}
+#a6{
+    background: #83CCF4;
+}
+#a7{
+    background: #B0DEF8;
+}
+#a8{
+    background: #D1ECFC;
+}
+#a9{
+    background: #DFEAF0;
+}
+#a10{
+    background: #EFF5F8;
+}
+
