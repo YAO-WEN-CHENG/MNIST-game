@@ -28,7 +28,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    width: 20%;
+    width: 10%;
 }
 
 #center{
@@ -37,7 +37,7 @@ body {
     justify-content:center;
     align-items: center;
     text-align: center;
-    width: 40%;
+    width: 60%;
 }
 
 #right-half{
@@ -46,13 +46,23 @@ body {
     justify-content:center;
     align-items: left;
     text-align: left;
-    width: 40%;
+    width: 30%;
 }
-
-#canvas{
+#canvas_contain{
+    display: flex;
+    flex-direction: row;
+}
+.canvas{
     width:280px;
     height:280px;
     background-color:#D9D9D9;
+}
+
+.hidden_canvas{
+    width: 28px; 
+    height: 28px; 
+    background-color: white; 
+    display: none; 
 }
 
 .Rule{
@@ -81,34 +91,34 @@ body {
     /* margin-bottom: 0px; */
 }
 
-#a1{
+#answer1{
     background: #0E5E8B;
 }
-#a2{
+#answer2{
     background: #1874A8;
 }
-#a3{
+#answer3{
     background: #31A2E2;
 }
-#a4{
+#answer4{
     background: #62B5E4;
 }
-#a5{
+#answer5{
     background: #70C0ED;
 }
-#a6{
+#answer6{
     background: #83CCF4;
 }
-#a7{
+#answer7{
     background: #B0DEF8;
 }
-#a8{
+#answer8{
     background: #D1ECFC;
 }
-#a9{
+#answer9{
     background: #DFEAF0;
 }
-#a10{
+#answer10{
     background: #EFF5F8;
 }
 
