@@ -1,25 +1,25 @@
+// 讀訓練模型
 const sess = new onnx.InferenceSession();
 const loadingModelPromise = sess.loadModel("onnx_model.onnx");
-
+// 讀畫板1資料
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 const rect = canvas.getBoundingClientRect();
+
 
 const CANVAS_SIZE = 280;    //表示原畫布的尺寸
 const CANVAS_SCALE = 0.1;   //表示要縮放的比例
 const INFERENCE_SIZE = 28;  //表示調整後的影像尺寸
 
+// 10位數隱藏層
 const hiddenCanvas = document.getElementById("hiddenCanvas");
 const hiddenCanvasCtx = hiddenCanvas.getContext("2d");
 hiddenCanvasCtx.scale(CANVAS_SCALE, CANVAS_SCALE);
 
 
-loadingModelPromise.then(() => {
-    canvas.addEventListener("mousedown", touchStart);
-    canvas.addEventListener("mousemove", touchMove);
-    canvas.addEventListener("mouseup", touchEnd);
-})
-
+// 答案相關變數
+var inputs;
+var random_answer;
 
 let isMouseActive = false;
 let x1 = 0;
@@ -64,13 +64,74 @@ function touchEnd(e) {
     isMouseActive = false;
 }
 
-// jQuery document ready
-$(document).ready(function () {
-    // code here
-    canvas.addEventListener("mousedown", touchStart);
-    canvas.addEventListener("mousemove", touchMove);
-    canvas.addEventListener("mouseup", touchEnd);
-});
+function touchMove(e) {
+    if (!isMouseActive) {
+     return
+    }
+
+    var pos = getPos(e.clientX, e.clientY);
+    x2 = pos.x;
+    y2 = pos.y;
+
+    ctx.lineWidth = 10;
+    ctx.lineCap = 'round'
+    ctx.lineJoin = "round";
+    ctx.strokeStyle = "#000000"
+
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+
+    x1 = x2;
+    y1 = y2;
+
+    updatePredictions();
+}
+
+
+function softmax(arr) {
+    return arr.map(function (value, index) {
+        return Math.exp(value) / arr.map(function (y /*value*/) { return Math.exp(y) }).reduce(function (a, b) { return a + b })
+    })
+}
+
+function clearArea() {
+    // Use the identity matrix while clearing the canvas
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    hiddenCanvasCtx.setTransform(CANVAS_SCALE, 0, 0, CANVAS_SCALE, 0, 0);
+    hiddenCanvasCtx.clearRect(0, 0, hiddenCanvasCtx.canvas.width / CANVAS_SCALE, hiddenCanvasCtx.canvas.height / CANVAS_SCALE);
+}
+
+
+function newgame(){
+    
+}
+
+
+function input_answer(draw){
+    $("#input").html(draw);
+}
+
+function start_game(){
+    $("#restart").click(function(){
+        canvas.addEventListener("mousedown", touchStart);
+        canvas.addEventListener("mousemove", touchMove);
+        canvas.addEventListener("mouseup", touchEnd);
+        $(this).html("Restart");
+        random_answer = Math.floor(Math.random()*(99))+ 1;
+        var answerString = $(".answer").html();
+        $(answerString).html(answerString);
+        console.log(random_answer);
+        clearArea();
+    });
+}
+
+
+loadingModelPromise.then(() => {
+    start_game();
+})
 
 
 
@@ -94,38 +155,8 @@ async function updatePredictions() {
     const predictions = softmax(outputTensor.data);
     const maxPrediction = Math.max(...predictions);
     const predictLabel = predictions.findIndex((n) => n == maxPrediction);
+    
+    input_answer(predictLabel)
     console.log(predictLabel);
     //
 }
-
-
-
-function touchMove(e) {
-    if (!isMouseActive) {
-     return
-}
-
-var pos = getPos(e.clientX, e.clientY);
-x2 = pos.x;
-y2 = pos.y;
-
-ctx.beginPath();
-ctx.moveTo(x1, y1);
-ctx.lineTo(x2, y2);
-ctx.stroke();
-
-x1 = x2;
-y1 = y2;
-
-    updatePredictions();         // update here
-}
-
-
-// Here
-function softmax(arr) {
-    return arr.map(function (value, index) {
-        return Math.exp(value) / arr.map(function (y /*value*/) { return Math.exp(y) }).reduce(function (a, b) { return a + b })
-    })
-}
-//
-
