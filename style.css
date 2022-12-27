@@ -8,27 +8,30 @@ body {
 #Title{
     font-weight:bold;
     font-size: 40px;
-    font-family: 'Papyrus';
+    font-family: monospace;
     text-align: center;
     color: white;
     padding: 10px;
+    height: 10%;
     background-color: #013D60;
 }
 
 .container{
+    height:90%;
     display: flex;
-    flex-wrap: wrap;
-    margin: auto;
-    margin-right: 10%;
-    justify-content: space-between;
+    /* margin: auto; */
+    /* margin-right: 5%; */
+    justify-content: start;
     align-items: center;
 }
 
 #left-half{
+    width: 20%;
+    height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    width: 10%;
+    /* justify-content: space-between; */
+    text-align: center;
 }
 
 #center{
@@ -38,87 +41,99 @@ body {
     align-items: center;
     text-align: center;
     width: 60%;
+    height: 100%;
 }
 
 #right-half{
+    width: 20%;
+    height: 100%;
     display: flex;
+    /* justify-content: space-between; */
     flex-direction: column;
-    justify-content:center;
-    align-items: left;
-    text-align: left;
-    width: 30%;
 }
-#canvas_contain{
-    display: flex;
-    flex-direction: row;
+.right{
+    height: auto;
+    padding-top: 64px;
+    padding-bottom: 64px;
+
+    text-align:center ;
+    font-size: 30px;
+    font-family: 'Papyrus';
+    background-color: #013D60;
+    font-weight:bold;
+    color: white;
 }
+
+#reset{
+    height: 100%;
+    font-weight:bold;
+    color: white;
+    font-size: 30px;
+    font-family: 'Papyrus';
+    align-items:center;
+    text-align:center ;
+    background-color: #013D60;
+}
+
 .canvas{
     width:280px;
     height:280px;
     background-color:#D9D9D9;
 }
 
-.hidden_canvas{
-    width: 28px; 
-    height: 28px; 
-    background-color: white; 
-    display: none; 
+
+#button_photo{
+    display: flex;
+    margin-bottom: 10px;
+    border-color:black;
+}
+
+.button_photo{
+    font-weight:bold;
+    font-size: 33px;
+    font-family: monospace;
+    text-align: center;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-left: 29px;
+    padding-right: 29px;
+    color: white;
+    background-color: #013D60;
 }
 
 .Rule{
-    font-family: 'Papyrus';
+    font-family:monospace;
+}
+ol{
+    text-align: left;
 }
 
-.Button{
+#now{
+    font-weight:bold;
+    color: rgb(43, 81, 122);
+    font-family:monospace;
+}
+
+.answer{
+    height: 33%;
     font-weight:bold;
     color: white;
     font-size: 30px;
     font-family: 'Papyrus';
     text-align: center;
     padding: 10px;
-    padding-left: 60px;
-    padding-right: 60px;
-    margin-bottom: 30px;
-    background-color: #013D60;
-}
-
-.answer{
-    font-weight:bold;
-    font-size: 20px;
-    font-family: 'Papyrus';
-    text-align: center;
-    padding: 10px;
-    /* margin-bottom: 0px; */
+    padding-top: 64px;
+    padding-bottom: 64px;
 }
 
 #answer1{
     background: #0E5E8B;
 }
 #answer2{
-    background: #1874A8;
-}
-#answer3{
-    background: #31A2E2;
-}
-#answer4{
-    background: #62B5E4;
-}
-#answer5{
     background: #70C0ED;
 }
-#answer6{
-    background: #83CCF4;
-}
-#answer7{
-    background: #B0DEF8;
-}
-#answer8{
+#answer3{
     background: #D1ECFC;
 }
-#answer9{
-    background: #DFEAF0;
-}
-#answer10{
-    background: #EFF5F8;
-}
+
 

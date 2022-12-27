@@ -1,25 +1,31 @@
-// 讀訓練模型
-const sess = new onnx.InferenceSession();
-const loadingModelPromise = sess.loadModel("onnx_model.onnx");
-// 讀畫板1資料
+const CANVAS_SIZE = 280;
+const CANVAS_SCALE = 0.1;
+const INFERENCE_SIZE = 28;
+
+let options = { willReadFrequently: true };
 const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
-const rect = canvas.getBoundingClientRect();
-
-
-const CANVAS_SIZE = 280;    //表示原畫布的尺寸
-const CANVAS_SCALE = 0.1;   //表示要縮放的比例
-const INFERENCE_SIZE = 28;  //表示調整後的影像尺寸
-
-// 10位數隱藏層
 const hiddenCanvas = document.getElementById("hiddenCanvas");
-const hiddenCanvasCtx = hiddenCanvas.getContext("2d");
+const loading = document.getElementById("loading");
+const ctx = canvas.getContext("2d", options);
+const hiddenCanvasCtx = hiddenCanvas.getContext("2d", options);
+const rect = canvas.getBoundingClientRect();
 hiddenCanvasCtx.scale(CANVAS_SCALE, CANVAS_SCALE);
 
 
-// 答案相關變數
-var inputs;
-var random_answer;
+const reset_button = document.getElementById("right-half");
+const clear_button = document.getElementById("clear");
+const save_button = document.getElementById("save");
+
+
+
+
+
+ctx.lineWidth = 15;
+ctx.lineCap = 'round'
+ctx.lineJoin = "round";
+ctx.strokeStyle = "#000000"
+
+const hasTouchEvent = 'ontouchstart' in window ? true : false;
 
 let isMouseActive = false;
 let x1 = 0;
@@ -27,68 +33,40 @@ let y1 = 0;
 let x2 = 0;
 let y2 = 0;
 
-function getPos(x, y) {
-    return {
-        x: Math.round((x - rect.left) / (rect.right - rect.left) * canvas.width),
-        y: Math.round((y - rect.top) / (rect.bottom - rect.top) * canvas.height)
-    }
-}
 
-function touchStart(e) {
-    isMouseActive = true;
-    var pos = getPos(e.clientX, e.clientY);
-    x1 = pos.x;
-    y1 = pos.y;
-}
+let password ;
+let count = 0;
+var submit =[];
 
-function touchMove(e) {
 
-    if (!isMouseActive) {
-        return
-    }
-    var pos = getPos(e.clientX, e.clientY);
-    x2 = pos.x;
-    y2 = pos.y;
+const sess = new onnx.InferenceSession();
+const loadingModelPromise = sess.loadModel("./onnx_model.onnx");
 
-		// Actual drawing.
-    ctx.beginPath();
-    ctx.moveTo(x1, y1);
-    ctx.lineTo(x2, y2);
-    ctx.stroke();
+async function updatePredictions() {
+    // Get the predictions for the canvas data.
+    hiddenCanvasCtx.drawImage(canvas, 0, 0);
+    const hiddenImgData = hiddenCanvasCtx.getImageData(0, 0, INFERENCE_SIZE, INFERENCE_SIZE);
+    var data = hiddenImgData.data;
+    var gray_data = [];
 
-    x1 = x2;
-    y1 = y2;
-}
-
-function touchEnd(e) {
-    isMouseActive = false;
-}
-
-function touchMove(e) {
-    if (!isMouseActive) {
-     return
+    for (var i = 3; i < data.length; i += 4) {
+        pix = data[i] / 255;
+        pix = (pix - 0.1307) / 0.3081
+        gray_data.push(pix);
     }
 
-    var pos = getPos(e.clientX, e.clientY);
-    x2 = pos.x;
-    y2 = pos.y;
+    const input = new onnx.Tensor(new Float32Array(gray_data), "float32", [1, 1, INFERENCE_SIZE, INFERENCE_SIZE]);
 
-    ctx.lineWidth = 10;
-    ctx.lineCap = 'round'
-    ctx.lineJoin = "round";
-    ctx.strokeStyle = "#000000"
+    const outputMap = await sess.run([input]);
+    const outputTensor = outputMap.values().next().value;
+    const predictions = softmax(outputTensor.data);
+    const maxPrediction = Math.max(...predictions);
+    const predictLabel = predictions.findIndex((n) => n == maxPrediction);
 
-    ctx.beginPath();
-    ctx.moveTo(x1, y1);
-    ctx.lineTo(x2, y2);
-    ctx.stroke();
-
-    x1 = x2;
-    y1 = y2;
-
-    updatePredictions();
+    console.log(predictLabel);
+    pre_answer=parseInt(predictLabel);
+    $("#now").html(predictLabel);
 }
-
 
 function softmax(arr) {
     return arr.map(function (value, index) {
@@ -105,58 +83,108 @@ function clearArea() {
 }
 
 
-function newgame(){
+function getPos(x, y) {
+    return {
+        x: Math.round((x - rect.left) / (rect.right - rect.left) * canvas.width),
+        y: Math.round((y - rect.top) / (rect.bottom - rect.top) * canvas.height)
+    }
+}
+
+// Prevent scrolling when touching the canvas
+function touchStart(e) {
+    if (e.target == canvas) {
+        e.preventDefault();
+        isMouseActive = true;
+        if (hasTouchEvent) {
+            var pos = getPos(e.touches[0].clientX, e.touches[0].clientY);
+        }
+        else {
+            var pos = getPos(e.clientX, e.clientY);
+        }
+        x1 = pos.x;
+        y1 = pos.y;
+    }
+}
+
+function touchEnd(e) {
+    if (e.target == canvas) {
+        isMouseActive = false;
+    }
     
 }
 
+function touchMove(e) {
+    if (e.target == canvas) {
+        e.preventDefault();
 
-function input_answer(draw){
-    $("#input").html(draw);
+        if (!isMouseActive) {
+            return
+        }
+        if (hasTouchEvent) {
+            var pos = getPos(e.touches[0].clientX, e.touches[0].clientY);
+        }
+        else {
+            var pos = getPos(e.clientX, e.clientY);
+        }
+        x2 = pos.x;
+        y2 = pos.y;
+
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.stroke();
+
+        x1 = x2;
+        y1 = y2;
+
+        updatePredictions();
+    }
 }
 
-function start_game(){
-    $("#restart").click(function(){
+document.body.addEventListener("mouseout", function (e) {
+    if (!e.relatedTarget || e.relatedTarget.nodeName === "HTML") {
+        isMouseDown = false;
+    }
+});
+
+loadingModelPromise.then(() => {
+    console.log("Successfully loaded model.");
+
+    password = Math.round(Math.random()*9);
+    console.log("password : "+password);
+    reset_button.addEventListener("click",reset, { passive: false});
+    clear_button.addEventListener("click",clearArea, { passive: false});
+    save_button.addEventListener("click",save, { passive: false});
+
+
+    if (hasTouchEvent) {
+        document.body.addEventListener("touchstart", touchStart, { passive: false });
+        document.body.addEventListener("touchmove", touchMove, { passive: false });
+        document.body.addEventListener("touchend", touchEnd, { passive: false });
+    }
+    else {
         canvas.addEventListener("mousedown", touchStart);
         canvas.addEventListener("mousemove", touchMove);
         canvas.addEventListener("mouseup", touchEnd);
-        $(this).html("Restart");
-        random_answer = Math.floor(Math.random()*(99))+ 1;
-        var answerString = $(".answer").html();
-        $(answerString).html(answerString);
-        console.log(random_answer);
-        clearArea();
-    });
-}
+        }
 
-
-loadingModelPromise.then(() => {
-    start_game();
 })
 
+function reset(e){
+    $("#reset").html("reset");
+    $("#answer1").html("answer1");
+    $("#answer2").html("answer2");
+    $("#answer3").html("answer3");
+    clearArea();
+}
 
-
-async function updatePredictions() {
-    hiddenCanvasCtx.drawImage(canvas, 0, 0);
-    const hiddenImgData = hiddenCanvasCtx.getImageData(0, 0, INFERENCE_SIZE, INFERENCE_SIZE);
-    var data = hiddenImgData.data;
-
-    var gray_data = [];
-    for (var i = 3; i < data.length; i += 4) {
-        pix = data[i] / 255;
-        pix = (pix - 0.1307) / 0.3081
-        gray_data.push(pix);
-    }
-    const input = new onnx.Tensor(new Float32Array(gray_data), "float32", [1, 1, INFERENCE_SIZE, INFERENCE_SIZE]);
-
-    const outputMap = await sess.run([input]);
-    const outputTensor = outputMap.values().next().value;
-
-		// Here
-    const predictions = softmax(outputTensor.data);
-    const maxPrediction = Math.max(...predictions);
-    const predictLabel = predictions.findIndex((n) => n == maxPrediction);
-    
-    input_answer(predictLabel)
-    console.log(predictLabel);
-    //
+function save(e){
+    console.log(pre_answer);
+    submit[count] = pre_answer;
+    console.log(submit[count]);
+    $("#answer"+(count+1)).html(submit[count]);
+    console.log("#answer"+count);
+    console.log(submit[count]);
+    count++;
+    clearArea();
 }
