@@ -155,7 +155,7 @@ loadingModelPromise.then(() => {
     clear_button.addEventListener("mouseenter",clear_enter, {passive: true});
     clear_button.addEventListener("mouseout",clear_leave, {passive: true});
 
-    password = Math.round(Math.random()*9);
+    password = Math.round(Math.random()*8)+1;
     console.log("password : "+password);
 
     reset_button.addEventListener("click",reset, { passive: false});
@@ -181,12 +181,20 @@ function reset(e){
     min = 0;
     max = 10;
     count = 0;
-    password = Math.round(Math.random()*9);
+    password = Math.round(Math.random()*8)+1;
     console.log("password : "+password);
     $("#reset").html("reset");
     $("#answer1").html("answer1");
     $("#answer2").html("answer2");
     $("#answer3").html("answer3");
+
+    $("#Title").css('background','#013D60');
+    $("#canvas").css('background','#dddee0');
+    $("#answer1").css('background','#0E5E8B');
+    $("#answer2").css('background','#70C0ED');
+    $("#answer3").css('background','#D1ECFC');
+    $("#right-half").css('background','#013D60');
+    $(".right").css('background', '#013D60');
     clearArea();
 }
 
@@ -194,6 +202,12 @@ function save(e){
     console.log(pre_answer);
     submit[count] = pre_answer;
     if (pre_answer>min && pre_answer<max){
+        if (count>=2 && pre_answer!=password){
+            loss();
+        }
+        else if(count<=2 && pre_answer==password){
+            win();
+        }
         if (pre_answer>password){
             max = pre_answer;
             $("#answer"+(count+1)).html(min+"~"+max);
@@ -210,28 +224,47 @@ function save(e){
         console.log(submit[count]);
         count++;
     }
+    
     else{
         alert("write the number between"+min+"~"+max);
     }
-    clearArea();
+    clearArea();    
+    
 }
 
 function loss(){
+    $("#Title").css('background', '#600101');
+    $("#canvas").css('background','#000000');
+    $("#answer1").css('background','#A81818');
+    $("#answer2").css('background','#ED7070');
+    $("#answer3").css('background','#F0DFDF');
+    $("#answer3").html(password);
+    $("#right-half").css('background','#600101');
+    $(".right").css('background', '#600101');
+}
 
+function win(){
+    $("#Title").css('background', '#866206');
+    $("#canvas").css('background','#000000');
+    $("#answer1").css('background','#C9940B');
+    $("#answer2").css('background','#E5B947');
+    $("#answer3").css('background','#E5C87D');
+    $("#right-half").css('background','#6B4306');
+    $(".right").css('background', '#6B4306');
 }
 
 function save_enter(e){
-    $("#save").css('background-color', '#1874A8');
+    $("#save").css('background-color', '#e9e9e9');
 }
 function save_leave(e){
-    $("#save").css('background-color', '#013D60');
+    $("#save").css('background-color', '#696969');
 }
 
 function clear_enter(e){
-    $("#clear").css('background-color', '#1874A8');
+    $("#clear").css('background-color', '#e9e9e9');
 }
 function clear_leave(e){
-    $("#clear").css('background-color', '#013D60');
+    $("#clear").css('background-color', '#696969');
 }
 
 
