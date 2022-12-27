@@ -17,10 +17,7 @@ const clear_button = document.getElementById("clear");
 const save_button = document.getElementById("save");
 
 
-
-
-
-ctx.lineWidth = 15;
+ctx.lineWidth = 13;
 ctx.lineCap = 'round'
 ctx.lineJoin = "round";
 ctx.strokeStyle = "#000000"
@@ -35,6 +32,8 @@ let y2 = 0;
 
 
 let password ;
+let min = 0;
+let max = 10;
 let count = 0;
 var submit =[];
 
@@ -149,9 +148,9 @@ document.body.addEventListener("mouseout", function (e) {
 
 loadingModelPromise.then(() => {
     console.log("Successfully loaded model.");
-
     password = Math.round(Math.random()*9);
     console.log("password : "+password);
+
     reset_button.addEventListener("click",reset, { passive: false});
     clear_button.addEventListener("click",clearArea, { passive: false});
     save_button.addEventListener("click",save, { passive: false});
@@ -171,6 +170,11 @@ loadingModelPromise.then(() => {
 })
 
 function reset(e){
+    min = 0;
+    max = 10;
+    count = 0;
+    password = Math.round(Math.random()*9);
+    console.log("password : "+password);
     $("#reset").html("reset");
     $("#answer1").html("answer1");
     $("#answer2").html("answer2");
@@ -181,10 +185,26 @@ function reset(e){
 function save(e){
     console.log(pre_answer);
     submit[count] = pre_answer;
-    console.log(submit[count]);
-    $("#answer"+(count+1)).html(submit[count]);
-    console.log("#answer"+count);
-    console.log(submit[count]);
-    count++;
+    if (pre_answer>min && pre_answer<max){
+        if (pre_answer>password){
+            max = pre_answer;
+            $("#answer"+(count+1)).html(min+"~"+max);
+        }
+        else if(pre_answer< password){
+            min = pre_answer;
+            $("#answer"+(count+1)).html(min+"~"+max);
+        }
+        else{
+            $("#answer"+(count+1)).html(pre_answer);
+        }
+        console.log(submit[count]);
+        console.log("#answer"+count);
+        console.log(submit[count]);
+        count++;
+    }
+    else{
+        alert("write the number between"+min+"~"+max);
+    }
     clearArea();
 }
+
