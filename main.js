@@ -148,14 +148,22 @@ document.body.addEventListener("mouseout", function (e) {
 
 loadingModelPromise.then(() => {
     console.log("Successfully loaded model.");
+
+    save_button.addEventListener("mouseenter",save_enter, {passive: true});
+    save_button.addEventListener("mouseout",save_leave, {passive: true});
+
+    clear_button.addEventListener("mouseenter",clear_enter, {passive: true});
+    clear_button.addEventListener("mouseout",clear_leave, {passive: true});
+
     password = Math.round(Math.random()*9);
     console.log("password : "+password);
 
     reset_button.addEventListener("click",reset, { passive: false});
-    clear_button.addEventListener("click",clearArea, { passive: false});
     save_button.addEventListener("click",save, { passive: false});
+    clear_button.addEventListener("click",clearArea, { passive: false});
+    
 
-
+    
     if (hasTouchEvent) {
         document.body.addEventListener("touchstart", touchStart, { passive: false });
         document.body.addEventListener("touchmove", touchMove, { passive: false });
@@ -207,4 +215,24 @@ function save(e){
     }
     clearArea();
 }
+
+function loss(){
+
+}
+
+function save_enter(e){
+    $("#save").css('background-color', '#1874A8');
+}
+function save_leave(e){
+    $("#save").css('background-color', '#013D60');
+}
+
+function clear_enter(e){
+    $("#clear").css('background-color', '#1874A8');
+}
+function clear_leave(e){
+    $("#clear").css('background-color', '#013D60');
+}
+
+
 
