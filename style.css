@@ -134,3 +134,12 @@ ol{
 #answer3{
     background: #D1ECFC;
 }
+
+
+#lossphoto{
+    display:none;
+}
+
+#winphoto{
+    display:none;
+}

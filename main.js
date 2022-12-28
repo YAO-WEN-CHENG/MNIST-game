@@ -187,7 +187,7 @@ function reset(e){
     $("#answer1").html("answer1");
     $("#answer2").html("answer2");
     $("#answer3").html("answer3");
-
+    $("#now").html("");
     $("#Title").css('background','#013D60');
     $("#canvas").css('background','#dddee0');
     $("#answer1").css('background','#0E5E8B');
@@ -195,6 +195,13 @@ function reset(e){
     $("#answer3").css('background','#D1ECFC');
     $("#right-half").css('background','#013D60');
     $(".right").css('background', '#013D60');
+
+    $("#canvas").css('display','block');
+    $("#rule").css('display','block');
+    $(".button_photo").css('display','block');
+    $("#now").css('display','block');
+    $(".tenor-gif-embed").css('display','none');
+
     clearArea();
 }
 
@@ -202,23 +209,30 @@ function save(e){
     console.log(pre_answer);
     submit[count] = pre_answer;
     if (pre_answer>min && pre_answer<max){
+        $("#now").html();
         if (count>=2 && pre_answer!=password){
+            $("#answer"+(count+1)).html("answer : "+pre_answer);
             loss();
+            
         }
         else if(count<=2 && pre_answer==password){
+            $("#answer"+(count+1)).html("answer : "+pre_answer);
             win();
         }
-        if (pre_answer>password){
-            max = pre_answer;
-            $("#answer"+(count+1)).html(min+"~"+max);
-        }
-        else if(pre_answer< password){
-            min = pre_answer;
-            $("#answer"+(count+1)).html(min+"~"+max);
-        }
         else{
-            $("#answer"+(count+1)).html(pre_answer);
+            if (pre_answer>password){
+                max = pre_answer;
+                $("#answer"+(count+1)).html(min+"~"+max);
+            }
+            else if(pre_answer< password){
+                min = pre_answer;
+                $("#answer"+(count+1)).html(min+"~"+max);
+            }
+            else{
+                $("#answer"+(count+1)).html(pre_answer);
+            }
         }
+        
         console.log(submit[count]);
         console.log("#answer"+count);
         console.log(submit[count]);
@@ -229,12 +243,16 @@ function save(e){
         alert("write the number between"+min+"~"+max);
     }
     clearArea();    
-    
 }
 
 function loss(){
     $("#Title").css('background', '#600101');
     $("#canvas").css('background','#000000');
+    $("#canvas").css('display','none');
+    $("#rule").css('display','none');
+    $(".button_photo").css('display','none');
+    $("#now").css('display','none');
+    $("#lossphoto").css('display','block');
     $("#answer1").css('background','#A81818');
     $("#answer2").css('background','#ED7070');
     $("#answer3").css('background','#F0DFDF');
@@ -251,6 +269,11 @@ function win(){
     $("#answer3").css('background','#E5C87D');
     $("#right-half").css('background','#6B4306');
     $(".right").css('background', '#6B4306');
+    $("#canvas").css('display','none');
+    $("#rule").css('display','none');
+    $(".button_photo").css('display','none');
+    $("#now").css('display','none');
+    $("#winphoto").css('display','block');
 }
 
 function save_enter(e){
