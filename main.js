@@ -62,6 +62,9 @@ async function updatePredictions() {
     const maxPrediction = Math.max(...predictions);
     const predictLabel = predictions.findIndex((n) => n == maxPrediction);
 
+    
+
+
     console.log(predictLabel);
     pre_answer=parseInt(predictLabel);
     $("#now").html(predictLabel);
