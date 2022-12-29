@@ -14,7 +14,7 @@
     
 
 ## Button  
-`reset` : reset all game.  
+`reset` : reset entire game.  
 `clear` : clear the canvas, then you can rewrite your answer.  
 `save`  : when the predict number is match to your answer,you can click this button to submit your answer.  
   
