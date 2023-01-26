@@ -13,6 +13,9 @@
   
     
 
+## Link with github page
+https://yao-wen-cheng.github.io/MNIST-game/index.html
+
 ## Button  
 `reset` : reset entire game.  
 `clear` : clear the canvas, then you can rewrite your answer.  
